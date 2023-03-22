@@ -11,6 +11,8 @@
             </div>
       </div>
 
+      @include('partials.success')
+
       <div class="row">
             @foreach ($projects as $project)
             <div class="col-3 mb-3">
@@ -23,12 +25,18 @@
                               <a href="{{ route('admin.projects.show', $project->id) }}" class="btn btn-info">
                                     <i class="fa-solid fa-magnifying-glass"></i>
                               </a>
+
                               <a href="{{ route('admin.projects.edit', $project->id) }}" class="btn btn-warning">
                                     <i class="fa-solid fa-pen"></i>
                               </a>
-                              <a href="#" class="btn btn-danger">
-                                    <i class="fa-solid fa-trash"></i>
-                              </a>
+
+                              <form action="{{ route('admin.projects.destroy', $project->id) }}" method="POST" class="d-inline-block" onsubmit="return confirm('Sei sicuro di voler eliminare il progetto?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">
+                                          <i class="fa-solid fa-trash"></i>
+                                    </button>
+                              </form>
                         </div>
                   </div>
             </div>
