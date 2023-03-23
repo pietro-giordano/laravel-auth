@@ -16,7 +16,7 @@ class UpdateProjectRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -33,7 +33,9 @@ class UpdateProjectRequest extends FormRequest
                 'max:128',
                 Rule::unique('projects')->ignore($this->project->id)
             ],
-            'description' => 'required|min:12|max:4096'
+            'description' => 'required|min:12|max:4096',
+            'image' => 'nullable|image|max:20480',
+            'delete_check' => 'nullable'
         ];
     }
 }

@@ -5,7 +5,7 @@
       <div class="row justify-content-center mb-4">
             <div class="col">
                   <h1>Modifica Progetto</h1>
-                  <a href="{{ route('admin.projects.update', $project->id) }}" class="btn btn-info">
+                  <a href="{{ route('admin.projects.index') }}" class="btn btn-info">
                         Torna indietro
                   </a>
             </div>
@@ -15,7 +15,7 @@
 
       <div class="row mb-4">
             <div class="col">
-                  <form action="{{ route('admin.projects.store') }}" method="POST">
+                  <form action="{{ route('admin.projects.update', $project->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         @method('PUT')
@@ -30,10 +30,29 @@
                               <textarea class="form-control" id="description" name="description" placeholder="Inserisci descrizione del progetto..." rows="10" required maxlength="4096">{{ old('description', $project->description) }}</textarea>
                         </div>
 
+                        <div class="mb-3">
+                              <label for="image" class="form-label">Immagine in evidenza</label>
+
+                              @if ($project->image)
+                                    <div class="form-check">
+                                          <input class="form-check-input" type="checkbox" name="delete_check" id="delete_check">
+                                          <label class="form-check-label" for="delete_check">
+                                                Cancella immagine in evidenza
+                                          </label>
+                                    </div>
+
+                                    <div>
+                                          <img class="mb-3 w-50" src="{{ asset('storage/'.$project->image) }}" alt="">
+                                    </div>
+                              @endif
+
+                              <input class="form-control" type="file" id="image" name="image">
+                        </div>
+
                         <p>I campi contrassegnati con * sono obbligatori</p>
 
                         <div>
-                              <button type="submit" class="btn btn-success">
+                              <button type="submit" class="btn btn-warning">
                                     Modifica
                               </button>
                         </div>

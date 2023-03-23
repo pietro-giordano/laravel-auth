@@ -22,6 +22,12 @@
                               <h6 class="card-subtitle mb-2 text-muted">{{ $project->slug }}</h6>
                               <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
 
+                              @if ($project->image)
+                                    <div>
+                                          <img class="card-img mb-3" src="{{ asset('storage/'.$project->image) }}" alt="">
+                                    </div>
+                              @endif
+
                               <a href="{{ route('admin.projects.show', $project->id) }}" class="btn btn-info">
                                     <i class="fa-solid fa-magnifying-glass"></i>
                               </a>

@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
-
 // Helpers
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -42,13 +42,14 @@ class ProjectController extends Controller
       public function store(StoreProjectRequest $request)
       {
             $data = $request->validated();
-            $slug = Str::slug($data['title']);
+            $data['slug'] = Str::slug($data['title']);
 
-            $newProject = Project::create([
-                  'title' => $data['title'],
-                  'slug' => $slug,
-                  'description' => $data['description']
-            ]);
+            if (array_key_exists('image', $data)) {
+                  $img_path = Storage::put('uploads', $data['image']);
+                  $data['image'] = $img_path;
+            }
+
+            $newProject = Project::create($data);
             return redirect()->route('admin.projects.show', $newProject)->with('success', 'Progetto aggiunto con successo');
       }
 
@@ -86,6 +87,21 @@ class ProjectController extends Controller
             $data = $request->validated();
             $data['slug'] = Str::slug($data['title']);
 
+            if (array_key_exists('delete_check', $data)) {
+                  if ($project->image) {
+                        Storage::delete($project->image);
+                        $project->image = null;
+                        $project->save();
+                  }
+            } else if (array_key_exists('image', $data)) {
+                  $img_path = Storage::put('uploads', $data['image']);
+                  $data['image'] = $img_path;
+
+                  if ($project->image) {
+                        Storage::delete($project->image);
+                  }
+            }
+
             $project->update($data);
             return redirect()->route('admin.projects.show', $project->id)->with('success', 'Progetto aggiornato con successo');
       }
@@ -98,6 +114,10 @@ class ProjectController extends Controller
        */
       public function destroy(Project $project)
       {
+            if ($project->image) {
+                  Storage::delete($project->image);
+            }
+
             $project->delete();
             return redirect()->route('admin.projects.index')->with('success', 'Progetto eliminato con successo');
       }

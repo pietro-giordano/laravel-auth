@@ -27,7 +27,7 @@
 
       <div class="row mb-4">
             <div class="col">
-                  <form action="{{ route('admin.projects.store') }}" method="POST">
+                  <form action="{{ route('admin.projects.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         <div class="mb-3">
@@ -38,6 +38,11 @@
                         <div class="mb-3">
                               <label for="description" class="form-label">Descrizione *</label>
                               <textarea class="form-control" id="description" name="description" placeholder="Inserisci descrizione del progetto..." rows="10" required maxlength="4096">{{ old('description') }}</textarea>
+                        </div>
+
+                        <div class="mb-3">
+                              <label for="image" class="form-label">Immagine in evidenza</label>
+                              <input class="form-control" type="file" id="image" name="image" accept="image/*">
                         </div>
 
                         <p>I campi contrassegnati con * sono obbligatori</p>

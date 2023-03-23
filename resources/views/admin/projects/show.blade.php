@@ -12,6 +12,12 @@
 
                   <p>{{ $project->description }}</p>
 
+                  @if ($project->image)
+                        <div>
+                              <img class="mb-3 w-50" src="{{ asset('storage/'.$project->image) }}" alt="">
+                        </div>
+                  @endif
+
                   <a href="{{ route('admin.projects.index') }}" class="btn btn-info">
                         Torna indietro
                   </a>
